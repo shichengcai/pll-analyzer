@@ -239,7 +239,7 @@
         status.className = 'status';
 
         try {
-            const resp = await fetch('http://localhost:8000/api/calculate', {
+            const resp = await fetch('https://pll-analyzer-production.up.railway.app/api/calculate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(params)
