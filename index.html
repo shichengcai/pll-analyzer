@@ -248,9 +248,9 @@
 
             if (data.success) {
                 const d = data.data;
-                document.getElementById('bandwidth').textContent = d.bandwidth + ' kHz';
-                document.getElementById('phaseMargin').textContent = d.phase_margin + ' °';
-                document.getElementById('zeros').textContent = d.zeros_text + ' kHz';
+                document.getElementById('bandwidth').textContent = d.bandwidth;
+                document.getElementById('phaseMargin').textContent = d.phase_margin;
+                document.getElementById('zeros').textContent = d.zeros_text;
                 document.getElementById('poles').textContent = d.poles_text || '无';
                 document.getElementById('plotImage').src = 'data:image/png;base64,' + d.plot_image;
                 resultCard.style.display = 'block';
