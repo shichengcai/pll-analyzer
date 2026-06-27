@@ -118,16 +118,16 @@ def calculate_pll(params: PLLParams):
                  ha='center', va='bottom', fontsize=9)
     ax1.grid(True, alpha=0.3)
     ax1.set_xlim([1, 1e5])
-    ax1.set_ylabel("幅值 (dB)")
-    ax1.set_title("开环幅频曲线")
+    ax1.set_ylabel("Magnitude (dB)")
+    ax1.set_title("Open-loop Magnitude")
 
     # 相频图
     ax2.semilogx(freq_khz, phase_margin_deg, 'r', linewidth=1.5)
     ax2.grid(True, alpha=0.3)
     ax2.set_xlim([1, 1e5])
-    ax2.set_xlabel("频率 (kHz)")
-    ax2.set_ylabel("相位裕量 (deg)")
-    ax2.set_title("开环相频曲线")
+    ax2.set_xlabel("Frequency (kHz)")
+    ax2.set_ylabel("Phase Margin (deg)")
+    ax2.set_title("Open-loop Phase")
     # 标注相位裕量
     if f_cross_khz > 0 and not np.isnan(Pm):
         ax2.plot(f_cross_khz, Pm, 'ro', markersize=8)
