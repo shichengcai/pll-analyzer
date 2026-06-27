@@ -80,7 +80,7 @@ def calculate_pll(params: PLLParams):
     poles_text_list = []
     for i, p in enumerate(poles_mhz, start=1):
         # 从 i=1 开始，显示为极点3、极点4...
-        poles_text_list.append(f"极点{i+2}: {p:.3f} MHz")
+        poles_text_list.append(f"极点{i+2}: {p:.3f}")
     poles_text = "\n".join(poles_text_list) if poles_text_list else "无"  
 
     freq_Hz = np.logspace(2, 8, 5000)
