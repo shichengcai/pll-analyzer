@@ -4,8 +4,10 @@ from pydantic import BaseModel
 import numpy as np
 import scipy.signal as sig
 from scipy import interpolate
-import matplotlib.pyplot as plt
 import matplotlib
+matplotlib.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial Unicode MS', 'SimHei', 'WenQuanYi Zen Hei']
+matplotlib.rcParams['axes.unicode_minus'] = False
+import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 import uvicorn
