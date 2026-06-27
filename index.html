@@ -172,9 +172,9 @@
     <h1>📊 PLL 开环分析工具</h1>
     <!-- 电路图显示区域 -->
     <div class="card">
-        <div class="card-title">四阶无源环路滤波器</div>
+        <div class="card-title">环路滤波器结构</div>
         <div style="text-align: center; padding: 10px 0;">
-            <img src="circuit.jpg" alt="四阶无源环路滤波器" style="max-width: 100%; height: auto; max-height: 150px;">
+            <img src="circuit.png" alt="环路滤波器结构" style="max-width: 100%; height: auto; max-height: 150px;">
         </div>
     </div>
     <div class="card">
@@ -198,10 +198,10 @@
     <div class="card" id="resultCard" style="display:none;">
         <div class="card-title">计算结果</div>
         <div class="result-grid">
-            <div class="result-item"><div class="label">环路带宽</div><div class="value" id="bandwidth">--- kHz</div></div>
-            <div class="result-item"><div class="label">相位裕量</div><div class="value" id="phaseMargin">--- °</div></div>
-            <div class="result-item"><div class="label">零点</div><div class="value" id="zeros">---</div></div>
-            <div class="result-item"><div class="label">极点</div><div class="value poles-text" id="poles">---</div></div>
+            <div class="result-item"><div class="label">环路带宽(kHz)</div><div class="value" id="bandwidth">---</div></div>
+            <div class="result-item"><div class="label">相位裕量(°)</div><div class="value" id="phaseMargin">---</div></div>
+            <div class="result-item"><div class="label">零点(kHz)</div><div class="value" id="zeros">---</div></div>
+            <div class="result-item"><div class="label">极点(MHz)</div><div class="value poles-text" id="poles">---</div></div>
         </div>
         <div class="plot-container" id="plotContainer">
             <img id="plotImage" src="" alt="波特图">
