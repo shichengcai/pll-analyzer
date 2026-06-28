@@ -61,7 +61,7 @@
             color: #4a5568;
             margin-bottom: 4px;
         }
-        .field input {
+        .field input, .field select {
             padding: 8px 12px;
             border: 1.5px solid #e2e8f0;
             border-radius: 8px;
@@ -70,7 +70,7 @@
             background: #f7fafc;
             width: 100%;
         }
-        .field input:focus {
+        .field input:focus, .field select:focus {
             outline: none;
             border-color: #4299e1;
             background: white;
@@ -98,6 +98,12 @@
         .btn:disabled {
             background: #a0aec0;
             cursor: not-allowed;
+        }
+        .btn-design {
+            background: #38a169;
+        }
+        .btn-design:hover {
+            background: #2f855a;
         }
         .result-grid {
             display: grid;
@@ -170,13 +176,40 @@
 <body>
 <div class="container">
     <h1>📊 PLL 开环分析工具</h1>
-    <!-- 电路图显示区域 -->
+    
+    <!-- 电路图 -->
     <div class="card">
         <div class="card-title">环路滤波器结构</div>
         <div style="text-align: center; padding: 10px 0;">
             <img src="circuit.png" alt="环路滤波器结构" style="max-width: 100%; height: auto; max-height: 150px;">
         </div>
     </div>
+
+    <!-- 自动设计 -->
+    <div class="card">
+        <div class="card-title">🎯 自动设计</div>
+        <div class="grid grid-3">
+            <div class="field">
+                <label>目标环路带宽 (kHz)</label>
+                <input id="target_bw" value="150" type="number" step="1">
+            </div>
+            <div class="field">
+                <label>目标相位裕量 (°)</label>
+                <input id="target_pm" value="60" type="number" step="1">
+            </div>
+            <div class="field">
+                <label>滤波器阶数</label>
+                <select id="order">
+                    <option value="2">2阶</option>
+                    <option value="3">3阶</option>
+                    <option value="4" selected>4阶</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-design" id="designBtn">🎯 自动设计</button>
+    </div>
+
+    <!-- 环路参数 -->
     <div class="card">
         <div class="card-title">环路参数</div>
         <div class="grid">
@@ -195,6 +228,7 @@
         <div class="status" id="status">就绪</div>
     </div>
 
+    <!-- 结果 -->
     <div class="card" id="resultCard" style="display:none;">
         <div class="card-title">计算结果</div>
         <div class="result-grid">
@@ -203,12 +237,12 @@
             <div class="result-item"><div class="label">零点(kHz)</div><div class="value" id="zeros">---</div></div>
             <div class="result-item"><div class="label">极点(MHz)</div><div class="value poles-text" id="poles">---</div></div>
         </div>
-        <div class="plot-container" id="plotContainer">
+        <div class="plot-container">
             <img id="plotImage" src="" alt="波特图">
         </div>
     </div>
-	
-	<div style="text-align: center; margin-top: 20px; padding: 12px 0; color: #a0aec0; font-size: 12px; border-top: 1px solid #edf2f7;">
+    
+    <div style="text-align: center; margin-top: 20px; padding: 12px 0; color: #a0aec0; font-size: 12px; border-top: 1px solid #edf2f7;">
         作者：石成才
     </div>
 </div>
@@ -267,9 +301,55 @@
         btn.disabled = false;
     }
 
+    // 自动设计
+    document.getElementById('designBtn').addEventListener('click', async function() {
+        const btn = this;
+        btn.disabled = true;
+        btn.textContent = '⏳ 设计中...';
+        status.textContent = '⏳ 自动设计中...';
+        status.className = 'status';
+
+        try {
+            const resp = await fetch('https://pll-analyzer-production.up.railway.app/api/design', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    Ip_mA: getVal('ip'),
+                    Kvco_MHz: getVal('kvco'),
+                    N: getVal('n'),
+                    target_bw: getVal('target_bw'),
+                    target_pm: getVal('target_pm'),
+                    order: parseInt(document.getElementById('order').value)
+                })
+            });
+            const data = await resp.json();
+
+            if (data.success) {
+                const comp = data.components;
+                document.getElementById('c1').value = comp.C1_nF;
+                document.getElementById('c2').value = comp.C2_nF;
+                document.getElementById('c3').value = comp.C3_nF;
+                document.getElementById('c4').value = comp.C4_nF;
+                document.getElementById('r2').value = comp.R2;
+                document.getElementById('r3').value = comp.R3;
+                document.getElementById('r4').value = comp.R4;
+                calculate();
+                status.textContent = '✅ 设计完成，已更新参数并重新计算';
+                status.className = 'status success';
+            } else {
+                status.textContent = '❌ 设计失败: ' + data.error;
+                status.className = 'status error';
+            }
+        } catch (e) {
+            status.textContent = '❌ 网络错误: ' + e.message;
+            status.className = 'status error';
+        }
+        btn.disabled = false;
+        btn.textContent = '🎯 自动设计';
+    });
+
     document.getElementById('calcBtn').addEventListener('click', calculate);
 
-    // Enter 键触发计算
     document.querySelectorAll('input').forEach(el => {
         el.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
     });
