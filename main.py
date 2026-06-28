@@ -17,7 +17,7 @@ import random
 matplotlib.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'Arial Unicode MS']
 matplotlib.rcParams['axes.unicode_minus'] = False
 
-app = FastAPI(title="PLL 开环分析 API")
+app = FastAPI(title="PLL开环分析 API")
 
 from fastapi.middleware.cors import CORSMiddleware
 
